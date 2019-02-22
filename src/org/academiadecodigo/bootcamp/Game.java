@@ -6,10 +6,7 @@ import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEventType;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardHandler;
 
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 public class Game implements KeyboardHandler {
 
@@ -19,6 +16,7 @@ public class Game implements KeyboardHandler {
     private Player player;
     private Keyboard keyboard;
     private FileWriter save;
+    private FileReader load;
 
 
 
@@ -49,19 +47,6 @@ public class Game implements KeyboardHandler {
     }
 
 
-    @Override
-    public void keyPressed(KeyboardEvent keyboardEvent) {
-        switch (keyboardEvent.getKey()){
-            case KeyboardEvent.KEY_LEFT: player.moveLeft();break;
-            case KeyboardEvent.KEY_RIGHT: player.moveRight();break;
-            case KeyboardEvent.KEY_UP: player.moveUp();break;
-            case KeyboardEvent.KEY_DOWN: player.moveDown();break;
-            case KeyboardEvent.KEY_SPACE: paintCell();break;
-            case KeyboardEvent.KEY_S: saveFile(); System.out.println("The game was saved!");break;
-            case KeyboardEvent.KEY_L:
-            default: System.out.println("this key doesn't apply in this game!");
-        }
-    }
 
     private void paintCell (){
         int playerCol = player.getCol();
@@ -75,11 +60,11 @@ public class Game implements KeyboardHandler {
     }
 
 
-    public void saveFile (){
+    private void saveFile (){
         try{save = new FileWriter(FILE_PATH);
             BufferedWriter bufferedWriter = new BufferedWriter(save);
-            bufferedWriter.write(String.valueOf(grid.getGrid()));
-            
+            bufferedWriter.write(arrayToString());
+            //String.valueOf(grid.getGrid()));
             bufferedWriter.flush();
             bufferedWriter.close();}
         catch (IOException ex){
@@ -87,12 +72,45 @@ public class Game implements KeyboardHandler {
     }
 
 
-    private void arrayToString (){
+    private String arrayToString (){
+        String result = null;
         for (Cell c: grid.getGrid()){
-            c.toString();
+            result += c.toString();
             System.out.println(c.toString());
         }
+        return result;
     }
+
+
+    private void loadFile (){
+        try{load = new FileReader(FILE_PATH);
+            BufferedReader bufferedReader = new BufferedReader(load);
+            String line = "";
+            String result = "";
+            while((line = bufferedReader.readLine()) != null) {
+                result += line + "\n";
+            }}
+        catch (FileNotFoundException ex){
+            ex.getMessage();}
+        catch (IOException ex2){
+            ex2.getMessage();}
+    }
+
+
+    @Override
+    public void keyPressed(KeyboardEvent keyboardEvent) {
+        switch (keyboardEvent.getKey()){
+            case KeyboardEvent.KEY_LEFT: player.moveLeft();break;
+            case KeyboardEvent.KEY_RIGHT: player.moveRight();break;
+            case KeyboardEvent.KEY_UP: player.moveUp();break;
+            case KeyboardEvent.KEY_DOWN: player.moveDown();break;
+            case KeyboardEvent.KEY_SPACE: paintCell();break;
+            case KeyboardEvent.KEY_S: saveFile(); System.out.println("The game was saved!");break;
+            case KeyboardEvent.KEY_L: loadFile();break;
+            default: System.out.println("this key doesn't apply in this game!");
+        }
+    }
+
 
 
     @Override
