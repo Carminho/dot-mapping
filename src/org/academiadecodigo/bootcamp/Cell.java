@@ -1,5 +1,6 @@
 package org.academiadecodigo.bootcamp;
 
+import org.academiadecodigo.simplegraphics.graphics.Color;
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 
 public class Cell {
@@ -9,6 +10,7 @@ public class Cell {
     private int col;
     private int row;
     private Rectangle cell;
+    private boolean isPainted;
 
 
     public Cell (int col, int row){
@@ -19,11 +21,11 @@ public class Cell {
     }
 
     public void setCol (int num){
-        col = num;
+        col += num;
     }
 
     public void setRow (int num){
-        row = num;
+        row += num;
     }
 
     public int getCol (){
@@ -38,4 +40,29 @@ public class Cell {
         return cell;
     }
 
+    public void markCell (){
+        if (!isPainted){
+            cell.fill();
+            cell.setColor(Color.BLACK);
+            isPainted = true;
+            return;
+        }
+        if (isPainted){
+            cell.delete();
+            cell.draw();
+            isPainted = false;
+            return;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Cell{" +
+                "CELL_SIZE=" + CELL_SIZE +
+                ", col=" + col +
+                ", row=" + row +
+                ", cell=" + cell +
+                ", isPainted=" + isPainted +
+                '}';
+    }
 }
