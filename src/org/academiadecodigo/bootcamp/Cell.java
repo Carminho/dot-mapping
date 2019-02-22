@@ -55,13 +55,26 @@ public class Cell {
         }
     }
 
+
+    public void setPainted (){
+        isPainted = true;
+    }
+
+
+    public void setUnpainted (){
+        isPainted = false;
+    }
+
+
+    public boolean isPainted (){
+        return isPainted;
+    }
+
     @Override
     public String toString() {
         return "Cell{" +
-                "CELL_SIZE=" + CELL_SIZE +
                 ", col=" + col +
                 ", row=" + row +
-                ", cell=" + cell +
                 ", isPainted=" + isPainted +
                 '}';
     }

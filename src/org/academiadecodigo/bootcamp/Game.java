@@ -60,11 +60,24 @@ public class Game implements KeyboardHandler {
     }
 
 
+
+    private String file (){
+        String str = "";
+        for (int i=0; i<grid.getGrid().length; i++){
+            if (grid.getGrid()[i].isPainted()){
+                str += "1";}
+            else {str += "0";}
+        }
+        System.out.println(str);
+        return str;
+    }
+
+
+
     private void saveFile (){
         try{save = new FileWriter(FILE_PATH);
             BufferedWriter bufferedWriter = new BufferedWriter(save);
-            bufferedWriter.write(arrayToString());
-            //String.valueOf(grid.getGrid()));
+            bufferedWriter.write(file());
             bufferedWriter.flush();
             bufferedWriter.close();}
         catch (IOException ex){
@@ -72,14 +85,6 @@ public class Game implements KeyboardHandler {
     }
 
 
-    private String arrayToString (){
-        String result = null;
-        for (Cell c: grid.getGrid()){
-            result += c.toString();
-            System.out.println(c.toString());
-        }
-        return result;
-    }
 
 
     private void loadFile (){
@@ -87,9 +92,22 @@ public class Game implements KeyboardHandler {
             BufferedReader bufferedReader = new BufferedReader(load);
             String line = "";
             String result = "";
+
             while((line = bufferedReader.readLine()) != null) {
-                result += line + "\n";
-            }}
+                result += line + "\n";}
+            System.out.println(result);
+
+            for (int i=0; i<grid.getGrid().length; i++){ ;
+                if (result.charAt(i) == '1'){                       //lógica contrária do jogo. no jogo, quando !isPainted pinta de preto e vice-versa. Quando carregamos, a lógica é contrária.
+                    grid.getGrid()[i].setUnpainted();
+                    grid.getGrid()[i].markCell();continue;}
+                if (result.charAt(i) == '0'){
+                    grid.getGrid()[i].setPainted();
+                    grid.getGrid()[i].markCell();}
+                System.out.println(grid.getGrid()[i]);
+            }
+
+        }
         catch (FileNotFoundException ex){
             ex.getMessage();}
         catch (IOException ex2){
